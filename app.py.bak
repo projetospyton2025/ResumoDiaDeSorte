@@ -1,0 +1,310 @@
+﻿# app.py
+from flask import Flask, render_template, jsonify
+import requests
+import json
+from datetime import datetime
+import os
+import traceback
+
+app = Flask(__name__)
+
+def format_currency(value):
+    try:
+        # Converter para float
+        if isinstance(value, str):
+            value = float(value.replace(',', '.'))
+        else:
+            value = float(value)
+            
+        # Formatar primeiro com ponto para milhares e ponto para decimal
+        formatted = '{:,.2f}'.format(value)
+        
+        # Substituir para o padrão brasileiro:
+        # 1. Primeiro troca a vírgula por um marcador temporário
+        # 2. Depois troca o ponto por vírgula
+        # 3. Por fim, troca o marcador temporário por ponto
+        formatted = formatted.replace(',', '|').replace('.', ',').replace('|', '.')
+        
+        return formatted
+    except:
+        return '0,00'
+
+def get_concurso(numero=None):
+    """
+    Obtém os dados do concurso do Dia de Sorte da API específica fornecida.
+    """
+    try:
+        if numero:
+            url = f'https://loteriascaixa-api.herokuapp.com/api/diadesorte/{numero}'
+        else:
+            url = 'https://loteriascaixa-api.herokuapp.com/api/diadesorte/latest'
+        
+        print(f"Tentando acessar: {url}")  # Debug para verificar a URL
+        
+        response = requests.get(url, timeout=10)  # Timeout ampliado para 10 segundos
+        if response.status_code == 200:
+            data = response.json()
+            
+            # Processamento do resultado da API
+            premiacoes = {premio['descricao']: premio for premio in data['premiacoes']}
+            
+            return {
+                'numero': data['concurso'],
+                'data': data['data'],
+                'numeros': [int(num) for num in data['dezenas']],
+                'mes_sorte': data['mesDaSorte'],
+                'acumulou': data['acumulou'],
+                'local_sorteio': data['local'],
+                'ganhadores': {
+                    'sete_acertos': premiacoes.get('7 acertos', {}).get('ganhadores', 0),
+                    'seis_acertos': premiacoes.get('6 acertos', {}).get('ganhadores', 0),
+                    'cinco_acertos': premiacoes.get('5 acertos', {}).get('ganhadores', 0),
+                    'quatro_acertos': premiacoes.get('4 acertos', {}).get('ganhadores', 0),
+                    'mes_de_sorte': premiacoes.get('Mês de Sorte', {}).get('ganhadores', 0)
+                },
+                'premios': {
+                    'sete_acertos': float(premiacoes.get('7 acertos', {}).get('valorPremio', 0)),
+                    'seis_acertos': float(premiacoes.get('6 acertos', {}).get('valorPremio', 0)),
+                    'cinco_acertos': float(premiacoes.get('5 acertos', {}).get('valorPremio', 0)),
+                    'quatro_acertos': float(premiacoes.get('4 acertos', {}).get('valorPremio', 0)),
+                    'mes_de_sorte': float(premiacoes.get('Mês de Sorte', {}).get('valorPremio', 0))
+                },
+                'proximo_concurso': {
+                    'data': data.get('dataProximoConcurso', ''),
+                    'numero': data.get('proximoConcurso', ''),
+                    'estimativa_premio': float(data.get('valorEstimadoProximoConcurso', 0))
+                }
+            }
+        else:
+            print(f"API retornou status code: {response.status_code}")
+            raise Exception(f"API retornou status code: {response.status_code}")
+            
+    except Exception as e:
+        print(f"Erro ao acessar a API: {str(e)}")
+        
+        # Se houver falha na API, use os dados simulados como fallback
+        try:
+            print("Usando dados simulados como fallback")
+            # Dados simulados para demonstração
+            mock_data = {
+                800: {
+                    'concurso': 800,
+                    'data': '01/03/2025',
+                    'dezenas': ['01', '04', '10', '15', '21', '23', '31'],
+                    'mesDaSorte': 'MARÇO',
+                    'acumulou': False,
+                    'local': 'ESPAÇO DA SORTE em SÃO PAULO, SP',
+                    'premiacoes': [
+                        {'descricao': '7 acertos', 'ganhadores': 2, 'valorPremio': 1000000.00},
+                        {'descricao': '6 acertos', 'ganhadores': 75, 'valorPremio': 2031.21},
+                        {'descricao': '5 acertos', 'ganhadores': 2500, 'valorPremio': 20.00},
+                        {'descricao': '4 acertos', 'ganhadores': 30000, 'valorPremio': 4.00},
+                        {'descricao': 'Mês de Sorte', 'ganhadores': 129347, 'valorPremio': 2.50}
+                    ],
+                    'dataProximoConcurso': '08/03/2025',
+                    'proximoConcurso': 801,
+                    'valorEstimadoProximoConcurso': 300000.00
+                },
+                799: {
+                    'concurso': 799,
+                    'data': '25/02/2025',
+                    'dezenas': ['03', '07', '13', '18', '24', '27', '29'],
+                    'mesDaSorte': 'JANEIRO',
+                    'acumulou': True,
+                    'local': 'ESPAÇO DA SORTE em SÃO PAULO, SP',
+                    'premiacoes': [
+                        {'descricao': '7 acertos', 'ganhadores': 0, 'valorPremio': 0},
+                        {'descricao': '6 acertos', 'ganhadores': 55, 'valorPremio': 2721.83},
+                        {'descricao': '5 acertos', 'ganhadores': 2100, 'valorPremio': 20.00},
+                        {'descricao': '4 acertos', 'ganhadores': 25000, 'valorPremio': 4.00},
+                        {'descricao': 'Mês de Sorte', 'ganhadores': 100347, 'valorPremio': 2.50}
+                    ],
+                    'dataProximoConcurso': '01/03/2025',
+                    'proximoConcurso': 800,
+                    'valorEstimadoProximoConcurso': 1200000.00
+                },
+                798: {
+                    'concurso': 798,
+                    'data': '18/02/2025',
+                    'dezenas': ['02', '05', '12', '17', '19', '25', '30'],
+                    'mesDaSorte': 'ABRIL',
+                    'acumulou': True,
+                    'local': 'ESPAÇO DA SORTE em SÃO PAULO, SP',
+                    'premiacoes': [
+                        {'descricao': '7 acertos', 'ganhadores': 0, 'valorPremio': 0},
+                        {'descricao': '6 acertos', 'ganhadores': 63, 'valorPremio': 1982.15},
+                        {'descricao': '5 acertos', 'ganhadores': 2200, 'valorPremio': 20.00},
+                        {'descricao': '4 acertos', 'ganhadores': 27500, 'valorPremio': 4.00},
+                        {'descricao': 'Mês de Sorte', 'ganhadores': 102347, 'valorPremio': 2.50}
+                    ],
+                    'dataProximoConcurso': '25/02/2025',
+                    'proximoConcurso': 799,
+                    'valorEstimadoProximoConcurso': 800000.00
+                },
+                797: {
+                    'concurso': 797,
+                    'data': '11/02/2025',
+                    'dezenas': ['06', '09', '14', '20', '22', '26', '28'],
+                    'mesDaSorte': 'DEZEMBRO',
+                    'acumulou': True,
+                    'local': 'ESPAÇO DA SORTE em SÃO PAULO, SP',
+                    'premiacoes': [
+                        {'descricao': '7 acertos', 'ganhadores': 0, 'valorPremio': 0},
+                        {'descricao': '6 acertos', 'ganhadores': 59, 'valorPremio': 2154.38},
+                        {'descricao': '5 acertos', 'ganhadores': 2300, 'valorPremio': 20.00},
+                        {'descricao': '4 acertos', 'ganhadores': 29000, 'valorPremio': 4.00},
+                        {'descricao': 'Mês de Sorte', 'ganhadores': 105000, 'valorPremio': 2.50}
+                    ],
+                    'dataProximoConcurso': '18/02/2025',
+                    'proximoConcurso': 798,
+                    'valorEstimadoProximoConcurso': 600000.00
+                },
+                796: {
+                    'concurso': 796,
+                    'data': '04/02/2025',
+                    'dezenas': ['08', '11', '16', '19', '24', '27', '31'],
+                    'mesDaSorte': 'FEVEREIRO',
+                    'acumulou': False,
+                    'local': 'ESPAÇO DA SORTE em SÃO PAULO, SP',
+                    'premiacoes': [
+                        {'descricao': '7 acertos', 'ganhadores': 1, 'valorPremio': 420000.00},
+                        {'descricao': '6 acertos', 'ganhadores': 87, 'valorPremio': 1493.53},
+                        {'descricao': '5 acertos', 'ganhadores': 2600, 'valorPremio': 20.00},
+                        {'descricao': '4 acertos', 'ganhadores': 32000, 'valorPremio': 4.00},
+                        {'descricao': 'Mês de Sorte', 'ganhadores': 109500, 'valorPremio': 2.50}
+                    ],
+                    'dataProximoConcurso': '11/02/2025',
+                    'proximoConcurso': 797,
+                    'valorEstimadoProximoConcurso': 300000.00
+                },
+                795: {
+                    'concurso': 795,
+                    'data': '28/01/2025',
+                    'dezenas': ['04', '07', '13', '22', '25', '29', '30'],
+                    'mesDaSorte': 'MAIO',
+                    'acumulou': True,
+                    'local': 'ESPAÇO DA SORTE em SÃO PAULO, SP',
+                    'premiacoes': [
+                        {'descricao': '7 acertos', 'ganhadores': 0, 'valorPremio': 0},
+                        {'descricao': '6 acertos', 'ganhadores': 79, 'valorPremio': 1613.92},
+                        {'descricao': '5 acertos', 'ganhadores': 2500, 'valorPremio': 20.00},
+                        {'descricao': '4 acertos', 'ganhadores': 30000, 'valorPremio': 4.00},
+                        {'descricao': 'Mês de Sorte', 'ganhadores': 102500, 'valorPremio': 2.50}
+                    ],
+                    'dataProximoConcurso': '04/02/2025',
+                    'proximoConcurso': 796,
+                    'valorEstimadoProximoConcurso': 400000.00
+                }
+            }
+            
+            # Se não for especificado um número, retorna o concurso mais recente (maior número)
+            if not numero:
+                numero = max(mock_data.keys())
+            
+            # Se o número solicitado não existir nos dados mock, use o mais recente
+            if numero not in mock_data:
+                numero = max(mock_data.keys())
+                
+            data = mock_data[numero]
+            
+            premiacoes = {premio['descricao']: premio for premio in data['premiacoes']}
+            
+            return {
+                'numero': data['concurso'],
+                'data': data['data'],
+                'numeros': [int(num) for num in data['dezenas']],
+                'mes_sorte': data['mesDaSorte'],
+                'acumulou': data['acumulou'],
+                'local_sorteio': data['local'],
+                'ganhadores': {
+                    'sete_acertos': premiacoes.get('7 acertos', {}).get('ganhadores', 0),
+                    'seis_acertos': premiacoes.get('6 acertos', {}).get('ganhadores', 0),
+                    'cinco_acertos': premiacoes.get('5 acertos', {}).get('ganhadores', 0),
+                    'quatro_acertos': premiacoes.get('4 acertos', {}).get('ganhadores', 0),
+                    'mes_de_sorte': premiacoes.get('Mês de Sorte', {}).get('ganhadores', 0)
+                },
+                'premios': {
+                    'sete_acertos': float(premiacoes.get('7 acertos', {}).get('valorPremio', 0)),
+                    'seis_acertos': float(premiacoes.get('6 acertos', {}).get('valorPremio', 0)),
+                    'cinco_acertos': float(premiacoes.get('5 acertos', {}).get('valorPremio', 0)),
+                    'quatro_acertos': float(premiacoes.get('4 acertos', {}).get('valorPremio', 0)),
+                    'mes_de_sorte': float(premiacoes.get('Mês de Sorte', {}).get('valorPremio', 0))
+                },
+                'proximo_concurso': {
+                    'data': data.get('dataProximoConcurso', ''),
+                    'numero': data.get('proximoConcurso', ''),
+                    'estimativa_premio': float(data.get('valorEstimadoProximoConcurso', 0))
+                }
+            }
+        except Exception as e2:
+            print(f"Erro ao usar dados simulados: {str(e2)}")
+            return None
+
+@app.route('/')
+def index():
+    try:
+        # Buscar o último concurso primeiro
+        ultimo_concurso = get_concurso()
+        if not ultimo_concurso:
+            raise Exception("Não foi possível obter o último concurso")
+            
+        # Buscar os 5 concursos anteriores
+        numero_atual = ultimo_concurso['numero']
+        concursos = [ultimo_concurso]
+        
+        for i in range(1, 6):
+            concurso = get_concurso(numero_atual - i)
+            if concurso:
+                concursos.append(concurso)
+                
+        return render_template('index.html', concursos=concursos, format_currency=format_currency, get_weekday=get_weekday)
+        
+    except Exception as e:
+        error_traceback = traceback.format_exc()
+        print(f"Erro na rota index: {str(e)}\n{error_traceback}")
+        return render_template('error.html', error="Erro: " + str(e))
+
+# Rota de diagnóstico para verificar status das APIs
+@app.route('/api-status')
+def api_status():
+    status = {}
+    
+    # Testa a API específica
+    try:
+        response = requests.get('https://loteriascaixa-api.herokuapp.com/api/diadesorte/latest', timeout=5)
+        status["API Dia de Sorte"] = {
+            "status_code": response.status_code,
+            "working": response.status_code == 200,
+            "message": "OK" if response.status_code == 200 else "Falha"
+        }
+    except Exception as e:
+        status["API Dia de Sorte"] = {
+            "status_code": None,
+            "working": False,
+            "message": str(e)
+        }
+    
+    return jsonify(status)
+
+def get_weekday(date_str):
+    try:
+        # Converter string de data para objeto datetime
+        data = datetime.strptime(date_str, '%d/%m/%Y')
+        
+        # Dias da semana em português
+        dias_semana = ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom']
+        
+        # Retornar o dia da semana formatado (0 = Segunda, 1 = Terça, etc)
+        return dias_semana[data.weekday()]
+    except Exception as e:
+        print(f"Erro ao obter dia da semana: {str(e)}")
+        return ""
+
+# Rota para verificar se a aplicação está funcionando
+@app.route('/health')
+def health():
+    return "OK", 200
+
+if __name__ == '__main__':
+    port = int(os.environ.get("PORT", 10000))
+    app.run(host="0.0.0.0", port=port, debug=True)

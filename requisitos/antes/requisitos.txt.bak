@@ -1,0 +1,27 @@
+preciso de uma aplicação com interface web para fazer o seguinte
+
+o usuario ira digitar alguns paplites para a mega sena.. 
+a sua função será validar esta entrada.. não deixando que seja digitado valores iguais...
+na mesma seguencia.. 
+ex: 01,01,25,32,40,56
+ou 
+000,01,25,32,40,56
+ou seja deverá ser validado em tempo real palpites valaido para a mega sena.. 
+
+crie um script chamado analisedospalpitesms.ps1
+este script deve:
+criar automaticamente as pastas, arquivos, (o conteudo dos arquivos deverá ser inserido automaticamente) criar o ambiente virtual, instalar o requirements.txt
+
+espero que tenha apenas um arquivos chamado analisedospalpitesms.ps1
+
+faça uma app simples.. apenas com os inputs.. (6) e quando preencher o ultimo ele libera mais 6 inputs para outros palpites..
+
+
+
+mas assim que terminar de preencher o ultimo input (no conjunto de 6) o sistema verifica quais e quantos digitos foram usados para construir aquele palpite..
+
+
+somente isso.. sem outros recursos... vou implanter mais tarde... 
+
+
+

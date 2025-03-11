@@ -1,0 +1,1827 @@
+QUERO QUE VC EXCLUA A INFORMAÇÃO CHAMADA Dígitos Usados em Importar Palpites. 
+Dígitos Usados não quero que apareca como titulo da tabela apenas
+Jogos Dígitos Ordenados e Quantidade
+deminui um pouco a fonte ou deixa auto para telas pequenas..
+FOQUE NA IMAGEM 4-IMG.jpg
+FOQUE NA IMAGEM 4-IMG.jpg
+FOQUE NA IMAGEM 4-IMG.jpg
+FOQUE NA IMAGEM 4-IMG.jpg
+FOQUE NA IMAGEM 4-IMG.jpg
+FOQUE NA IMAGEM 4-IMG.jpg
+FOQUE NA IMAGEM 4-IMG.jpg
+
+
+
+Diretório: J:\Meu Drive\ProjetosPython\Loterias\Estrategias\MegaSena\AnaliseDosPalpitesMS
+
+
+Mode                 LastWriteTime         Length Name
+----                 -------------         ------ ----
+d-----        05/03/2025     07:52                .git
+d-----        03/03/2025     07:18                requisitos
+d-----        03/03/2025     07:33                venv
+d-----        04/03/2025     11:14                templates
+d-----        03/03/2025     07:33                static
+d-----        05/03/2025     08:08                .venv
+------        03/03/2025     07:17           1096 LICENSE
+------        03/03/2025     07:17             22 README.md
+------        03/03/2025     08:58             95 requirements.txt
+------        03/03/2025     08:33            342 app.py
+------        03/03/2025     07:33            198 start.bat
+
+
+(venv) PS J:\Meu Drive\ProjetosPython\Loterias\Estrategias\MegaSena\AnaliseDosPalpitesMS>
+
+
+from flask import Flask, render_template
+import os
+
+
+app = Flask(__name__)
+
+@app.route('/')
+def index():
+    return render_template('index.html')
+
+"""
+if __name__ == '__main__':
+    app.run(debug=True)
+"""
+
+
+
+if __name__ == '__main__':
+    port = int(os.environ.get("PORT", 10000))
+    app.run(host="0.0.0.0", port=port)
+	
+	// VariÃ¡veis globais
+const palpitesContainer = document.getElementById('palpites-container');
+let palpiteCount = 1;
+
+// FunÃ§Ã£o para inicializar os handlers da pÃ¡gina
+function init() {
+    // Adiciona event listeners para o primeiro conjunto de inputs
+    adicionarEventListenersParaInputs(palpitesContainer.querySelector('.palpite-row'));
+}
+
+// Função para adicionar uma nova linha de palpites
+function adicionarNovaPalpiteRow() {
+    palpiteCount++;
+    
+    const novaPalpiteRow = document.createElement('div');
+    novaPalpiteRow.className = 'palpite-row';
+    novaPalpiteRow.innerHTML = `
+        <div class="numeros-container">
+            <input type="number" min="1" max="60" class="numero-input" placeholder="Nº 1" required>
+            <input type="number" min="1" max="60" class="numero-input" placeholder="Nº 2" required>
+            <input type="number" min="1" max="60" class="numero-input" placeholder="Nº 3" required>
+            <input type="number" min="1" max="60" class="numero-input" placeholder="Nº 4" required>
+            <input type="number" min="1" max="60" class="numero-input" placeholder="Nº 5" required>
+            <input type="number" min="1" max="60" class="numero-input" placeholder="Nº 6" required>
+        </div>
+        <div class="analise-container">
+            <!-- Aqui serão exibidos os resultados da análise -->
+        </div>
+    `;
+    
+    palpitesContainer.appendChild(novaPalpiteRow);
+    adicionarEventListenersParaInputs(novaPalpiteRow);
+}
+
+// FunÃ§Ã£o para adicionar event listeners aos inputs de uma linha de palpites
+function adicionarEventListenersParaInputs(palpiteRow) {
+    const inputs = palpiteRow.querySelectorAll('.numero-input');
+    const analiseContainer = palpiteRow.querySelector('.analise-container');
+    
+    inputs.forEach((input, index) => {
+        // ValidaÃ§Ã£o em tempo real
+        input.addEventListener('input', function() {
+            validarInput(input, inputs, index);
+        });
+        
+        // Quando o Ãºltimo input for preenchido, adiciona uma nova linha
+        if (index === inputs.length - 1) {
+            input.addEventListener('change', function() {
+                if (estaPreenchidoCorretamente(inputs)) {
+                    // Faz a anÃ¡lise do palpite
+                    analisarPalpite(inputs, analiseContainer);
+                    
+                    // Adiciona uma nova linha de palpites
+                    adicionarNovaPalpiteRow();
+                }
+            });
+        }
+    });
+}
+
+// FunÃ§Ã£o para validar um input individual
+function validarInput(input, allInputs, currentIndex) {
+    // Limpa classes de validaÃ§Ã£o
+    input.classList.remove('valid', 'invalid');
+    
+    const valor = parseInt(input.value);
+    
+    // Verifica se estÃ¡ vazio
+    if (!input.value.trim()) {
+        return;
+    }
+    
+    // Verifica se estÃ¡ no intervalo vÃ¡lido
+    if (isNaN(valor) || valor < 1 || valor > 60) {
+        input.classList.add('invalid');
+        return;
+    }
+    
+    // Verifica se hÃ¡ nÃºmeros repetidos
+    for (let i = 0; i < allInputs.length; i++) {
+        if (i !== currentIndex && parseInt(allInputs[i].value) === valor) {
+            input.classList.add('invalid');
+            return;
+        }
+    }
+    
+    // Se passou por todas as validaÃ§Ãµes, marca como vÃ¡lido
+    input.classList.add('valid');
+}
+
+// FunÃ§Ã£o para verificar se todos os inputs estÃ£o preenchidos corretamente
+function estaPreenchidoCorretamente(inputs) {
+    for (let input of inputs) {
+        if (!input.value || input.classList.contains('invalid')) {
+            return false;
+        }
+    }
+    return true;
+}
+
+// FunÃ§Ã£o para analisar o palpite completo
+function analisarPalpite(inputs, analiseContainer) {
+    // Coleta os nÃºmeros
+    const numeros = Array.from(inputs).map(input => parseInt(input.value));
+    
+    // Analisa quantos dÃ­gitos diferentes foram usados
+    const digitosUsados = new Set();
+    numeros.forEach(numero => {
+        const digitos = numero.toString().padStart(2, '0').split('');
+        digitos.forEach(digito => digitosUsados.add(digito));
+    });
+    
+    // Cria o HTML da anÃ¡lise
+    const analiseHTML = `
+        <h3>Análise do Palpite</h3>
+        <p><strong>Dígitos utilizados (${digitosUsados.size}):</strong></p>
+        <div class="numeros-usados">
+            ${Array.from(digitosUsados).sort().map(digito => 
+                `<span class="numero-usado">${digito}</span>`
+            ).join('')}
+        </div>
+    `;
+    
+    // Atualiza o container de anÃ¡lise
+    analiseContainer.innerHTML = analiseHTML;
+}
+
+// Inicializa a pÃ¡gina quando o DOM estiver carregado
+document.addEventListener('DOMContentLoaded', init);
+
+// Funções para a área de arrastar e soltar
+document.addEventListener('DOMContentLoaded', function() {
+    // Inicializa o event listener para a seção de arrastar e soltar
+    inicializarDropArea();
+});
+
+function inicializarDropArea() {
+    const dropArea = document.getElementById('drop-area');
+    
+    // Prevenir comportamento padrão de arrastar e soltar
+    ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+        dropArea.addEventListener(eventName, preventDefaults, false);
+    });
+    
+    // Destacar a área quando um arquivo é arrastado para dentro
+    ['dragenter', 'dragover'].forEach(eventName => {
+        dropArea.addEventListener(eventName, highlight, false);
+    });
+    
+    // Remover destaque quando o arquivo é arrastado para fora ou solto
+    ['dragleave', 'drop'].forEach(eventName => {
+        dropArea.addEventListener(eventName, unhighlight, false);
+    });
+    
+    // Processar os arquivos quando forem soltos
+    dropArea.addEventListener('drop', handleDrop, false);
+    
+    // Adicionar efeito de "active" ao clicar
+    dropArea.addEventListener('mousedown', function() {
+        this.classList.add('active');
+    });
+    
+    window.addEventListener('mouseup', function() {
+        dropArea.classList.remove('active');
+    });
+}
+
+function preventDefaults(e) {
+    e.preventDefault();
+    e.stopPropagation();
+}
+
+function highlight(e) {
+    document.getElementById('drop-area').classList.add('highlight');
+}
+
+function unhighlight(e) {
+    document.getElementById('drop-area').classList.remove('highlight');
+}
+
+function handleDrop(e) {
+    const dt = e.dataTransfer;
+    const files = dt.files;
+    handleFiles(files);
+}
+
+// Processa os arquivos
+async function handleFiles(files) {
+    showLoading();
+    
+    try {
+        const fileArray = Array.from(files);
+        if (fileArray.length === 0) {
+            hideLoading();
+            return;
+        }
+        
+        // Verificar se são arquivos válidos
+        const validExtensions = ['.txt', '.csv'];
+        const allValid = fileArray.every(file => {
+            const extension = '.' + file.name.split('.').pop().toLowerCase();
+            return validExtensions.includes(extension);
+        });
+        
+        if (!allValid) {
+            showNotification('Apenas arquivos .txt e .csv são aceitos', 'error');
+            hideLoading();
+            return;
+        }
+        
+        // Processar cada arquivo
+        const jogosPromises = fileArray.map(processarArquivo);
+        const resultadosPorArquivo = await Promise.all(jogosPromises);
+        
+        // Juntar todos os jogos de todos os arquivos
+        const todosJogos = resultadosPorArquivo.flat();
+        
+        if (todosJogos.length === 0) {
+            showNotification('Nenhum jogo da Mega Sena foi encontrado nos arquivos', 'error');
+            hideLoading();
+            return;
+        }
+        
+        exibirJogosImportados(todosJogos);
+        showNotification(`${todosJogos.length} jogos importados com sucesso!`, 'success');
+    } catch (error) {
+        console.error('Erro ao processar arquivos:', error);
+        showNotification('Erro ao processar os arquivos', 'error');
+    } finally {
+        hideLoading();
+    }
+}
+
+// Processa um único arquivo
+async function processarArquivo(file) {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        
+        reader.onload = function(e) {
+            try {
+                const conteudo = e.target.result;
+                const jogos = extrairJogosMegaSena(conteudo);
+                resolve(jogos);
+            } catch (error) {
+                console.error(`Erro ao processar o arquivo ${file.name}:`, error);
+                reject(error);
+            }
+        };
+        
+        reader.onerror = function() {
+            reject(new Error(`Erro ao ler o arquivo ${file.name}`));
+        };
+        
+        reader.readAsText(file);
+    });
+}
+
+// Extrai jogos da Mega Sena do conteúdo do arquivo
+function extrairJogosMegaSena(conteudo) {
+    const linhas = conteudo.split(/\r?\n/);
+    const jogos = [];
+    
+    // Expressões regulares para diferentes formatos de jogos da Mega Sena
+    const regexes = [
+        /\b(\d{2})[\s\-,;._](\d{2})[\s\-,;._](\d{2})[\s\-,;._](\d{2})[\s\-,;._](\d{2})[\s\-,;._](\d{2})\b/, // formato 01-02-03-04-05-06 ou variações
+        /\b(\d{2}),\s*(\d{2}),\s*(\d{2}),\s*(\d{2}),\s*(\d{2}),\s*(\d{2})\b/, // formato com vírgulas e espaços
+        /\b(\d{1,2})\s+(\d{1,2})\s+(\d{1,2})\s+(\d{1,2})\s+(\d{1,2})\s+(\d{1,2})\b/ // formato apenas com espaços
+    ];
+    
+    for (let linha of linhas) {
+        let jogoEncontrado = false;
+        
+        for (let regex of regexes) {
+            const match = linha.match(regex);
+            if (match) {
+                // Extrair os números do jogo e converter para números
+                const numeros = match.slice(1, 7).map(num => parseInt(num, 10));
+                
+                // Verificar se todos os números estão no intervalo válido
+                const numerosValidos = numeros.every(num => num >= 1 && num <= 60);
+                
+                // Verificar se não há números repetidos
+                const numerosUnicos = new Set(numeros).size === 6;
+                
+                if (numerosValidos && numerosUnicos) {
+                    const jogo = {
+                        numeros: numeros.sort((a, b) => a - b), // Ordenar os números
+                        digitosUsados: extrairDigitos(numeros),
+                        digitosOrdenados: extrairDigitosOrdenados(numeros),
+                        quantidadeDigitos: extrairDigitosOrdenados(numeros).length
+                    };
+                    jogos.push(jogo);
+                    jogoEncontrado = true;
+                    break;
+                }
+            }
+        }
+        
+        // Se nenhum jogo foi encontrado, procurar por números individuais
+        if (!jogoEncontrado) {
+            const numerosIndividuais = linha.match(/\b\d{1,2}\b/g);
+            if (numerosIndividuais && numerosIndividuais.length === 6) {
+                const numeros = numerosIndividuais.map(num => parseInt(num, 10));
+                
+                // Verificar se todos os números estão no intervalo válido
+                const numerosValidos = numeros.every(num => num >= 1 && num <= 60);
+                
+                // Verificar se não há números repetidos
+                const numerosUnicos = new Set(numeros).size === 6;
+                
+                if (numerosValidos && numerosUnicos) {
+                    const jogo = {
+                        numeros: numeros.sort((a, b) => a - b), // Ordenar os números
+                        digitosUsados: extrairDigitos(numeros),
+                        digitosOrdenados: extrairDigitosOrdenados(numeros),
+                        quantidadeDigitos: extrairDigitosOrdenados(numeros).length
+                    };
+                    jogos.push(jogo);
+                }
+            }
+        }
+    }
+    
+    return jogos;
+}
+
+// Extrai os dígitos usados em um jogo
+function extrairDigitos(numeros) {
+    const digitosSet = new Set();
+    
+    numeros.forEach(numero => {
+        // Converter para string e garantir que tenha dois dígitos
+        const numeroStr = numero.toString().padStart(2, '0');
+        for (let digito of numeroStr) {
+            digitosSet.add(digito);
+        }
+    });
+    
+    // Converter de volta para array e ordenar
+    return Array.from(digitosSet).sort();
+}
+
+// Extrai os dígitos ordenados para exibição
+function extrairDigitosOrdenados(numeros) {
+    return extrairDigitos(numeros);
+}
+
+// Exibe os jogos importados na tabela
+// Função para exibir jogos importados
+function exibirJogosImportados(jogos) {
+    const tbody = document.querySelector('#jogos-importados-table tbody');
+    const container = document.getElementById('jogos-importados-container');
+    
+    // Limpar tabela anterior
+    tbody.innerHTML = '';
+    
+    // Exibir o container da tabela
+    container.style.display = 'block';
+    
+    // Adicionar cada jogo à tabela
+    jogos.forEach(jogo => {
+        const tr = document.createElement('tr');
+        
+        // Coluna dos números do jogo
+        const tdJogo = document.createElement('td');
+        tdJogo.textContent = jogo.numeros.map(n => n.toString().padStart(2, '0')).join(' - ');
+        tr.appendChild(tdJogo);
+        
+        // Coluna dos dígitos usados
+        const tdDigitos = document.createElement('td');
+        const digitosDiv = document.createElement('div');
+        digitosDiv.className = 'digitos-celula';
+        
+        jogo.digitosUsados.forEach(digito => {
+            const digitoSpan = document.createElement('span');
+            digitoSpan.className = 'digito-item';
+            digitoSpan.textContent = digito;
+            digitoSpan.style.color = 'yellow'; // Cor negra para Digitos Usados
+            digitosDiv.appendChild(digitoSpan);
+            
+            // Adicionar espaço entre os dígitos
+            digitosDiv.appendChild(document.createTextNode(' '));
+        });
+        
+        tdDigitos.appendChild(digitosDiv);
+        tr.appendChild(tdDigitos);
+        
+        // Coluna dos dígitos ordenados
+        const tdDigitosOrdenados = document.createElement('td');
+        tdDigitosOrdenados.className = 'digitos-ordenados'; // Adiciona classe para centralização
+        tdDigitosOrdenados.textContent = jogo.digitosOrdenados.join(', ');
+        tr.appendChild(tdDigitosOrdenados);
+        
+        // Coluna da quantidade de dígitos
+        const tdQuantidade = document.createElement('td');
+        tdQuantidade.textContent = jogo.quantidadeDigitos;
+        tr.appendChild(tdQuantidade);
+        
+        tbody.appendChild(tr);
+    });
+    
+    // Adicionar botão de download ao final da tabela, caso ainda não exista
+    if (!document.getElementById('download-importados-excel-btn')) {
+        // Criar container para botões, se ainda não existir
+        let acoesContainer = document.querySelector('#jogos-importados-container .acoes-container');
+        
+        if (!acoesContainer) {
+            acoesContainer = document.createElement('div');
+            acoesContainer.className = 'acoes-container';
+            container.appendChild(acoesContainer);
+        }
+        
+        // Criar botão de download
+        const downloadBtn = document.createElement('button');
+        downloadBtn.id = 'download-importados-excel-btn';
+        downloadBtn.className = 'button';
+        downloadBtn.style.backgroundColor = '#217346'; // Cor do Excel
+        downloadBtn.textContent = 'Baixar em Excel';
+        downloadBtn.addEventListener('click', downloadJogosImportadosExcel);
+        
+        // Adicionar o botão ao container
+        acoesContainer.appendChild(downloadBtn);
+    }
+}
+
+// Função para download dos jogos importados em Excel
+function downloadJogosImportadosExcel() {
+    // Verificar se há jogos importados
+    const jogosImportadosTable = document.querySelector('#jogos-importados-table tbody');
+    
+    if (!jogosImportadosTable || jogosImportadosTable.rows.length === 0) {
+        showNotification('Não há jogos importados para baixar.', 'error');
+        return;
+    }
+    
+    // Criar conteúdo HTML para Excel
+    let excelContent = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40">';
+    excelContent += '<head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>Jogos Importados</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--></head>';
+    excelContent += '<body><table border="1">';
+    
+    // Adicionar cabeçalho com fundo preto e texto branco
+    excelContent += '<tr>';
+    excelContent += '<th style="background-color: #000000; color: #ffffff;">Jogo</th>';
+    excelContent += '<th style="background-color: #000000; color: #ffffff;">Dígitos Usados</th>';
+    excelContent += '<th style="background-color: #000000; color: #ffffff;">Dígitos Ordenados</th>';
+    excelContent += '<th style="background-color: #000000; color: #ffffff;">Quantidade</th>';
+    excelContent += '</tr>';
+    
+    // Extrair dados da tabela
+    for (let i = 0; i < jogosImportadosTable.rows.length; i++) {
+        const row = jogosImportadosTable.rows[i];
+        
+        excelContent += '<tr>';
+        // Coluna Jogo
+        excelContent += `<td style="text-align: center;">${row.cells[0].textContent}</td>`;
+        
+        // Coluna Dígitos Usados - extrair texto dos dígitos
+        const digitosUsados = Array.from(row.cells[1].querySelectorAll('.digito-item'))
+            .map(el => el.textContent.trim())
+            .join(' ');
+        excelContent += `<td style="text-align: center;">${digitosUsados}</td>`;
+        
+        // Coluna Dígitos Ordenados
+        excelContent += `<td style="text-align: center;">${row.cells[2].textContent}</td>`;
+        
+        // Coluna Quantidade
+        excelContent += `<td style="text-align: center;">${row.cells[3].textContent}</td>`;
+        
+        excelContent += '</tr>';
+    }
+    
+    excelContent += '</table></body></html>';
+    
+    // Criar o blob com tipo MIME para Excel
+    const blob = new Blob([excelContent], {type: 'application/vnd.ms-excel'});
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = 'jogos_importados_mega_sena.xls';
+    link.click();
+    
+    showNotification('Download dos jogos importados iniciado!', 'success');
+}
+
+// Funções auxiliares para UI
+
+function showLoading() {
+    let loadingOverlay = document.querySelector('.loading-overlay');
+    
+    if (!loadingOverlay) {
+        loadingOverlay = document.createElement('div');
+        loadingOverlay.className = 'loading-overlay';
+        
+        const loader = document.createElement('div');
+        loader.className = 'loader';
+        
+        loadingOverlay.appendChild(loader);
+        document.body.appendChild(loadingOverlay);
+    }
+    
+    loadingOverlay.style.display = 'flex';
+}
+
+function hideLoading() {
+    const loadingOverlay = document.querySelector('.loading-overlay');
+    if (loadingOverlay) {
+        loadingOverlay.style.display = 'none';
+    }
+}
+
+function showNotification(message, type = 'info') {
+    let notification = document.querySelector('.notification');
+    
+    if (!notification) {
+        notification = document.createElement('div');
+        notification.className = 'notification';
+        document.body.appendChild(notification);
+    }
+    
+    // Resetar classes
+    notification.className = 'notification';
+    
+    // Adicionar classe de tipo
+    if (type) {
+        notification.classList.add(type);
+    }
+    
+    notification.textContent = message;
+    
+    // Mostrar notificação
+    setTimeout(() => {
+        notification.classList.add('show');
+    }, 10);
+    
+    // Ocultar após alguns segundos
+    setTimeout(() => {
+        notification.classList.remove('show');
+    }, 5000);
+}
+// Funções para geração de jogos aleatórios
+document.addEventListener('DOMContentLoaded', function() {
+    // Inicializar event listeners para seção de jogos aleatórios
+    inicializarGeradorJogos();
+});
+
+// Array global para armazenar os jogos gerados
+let jogosGerados = [];
+
+function inicializarGeradorJogos() {
+    const gerarJogosBtn = document.getElementById('gerar-jogos-btn');
+    const downloadExcelBtn = document.getElementById('download-excel-btn');
+    const gerarMaisBtn = document.getElementById('gerar-mais-btn');
+    
+    if (gerarJogosBtn) {
+        gerarJogosBtn.addEventListener('click', gerarJogosAleatorios);
+    }
+    
+    if (downloadExcelBtn) {
+        downloadExcelBtn.addEventListener('click', downloadJogosExcel);
+    }
+    
+    if (gerarMaisBtn) {
+        gerarMaisBtn.addEventListener('click', gerarMaisJogos);
+    }
+}
+
+function gerarJogosAleatorios() {
+    const quantidadeDigitos = document.getElementById('quantidade-digitos').value;
+    const quantidadeJogos = parseInt(document.getElementById('quantidade-jogos').value);
+    
+    // Validar entrada
+    if (!quantidadeDigitos) {
+        showNotification('Selecione a quantidade de dígitos', 'error');
+        return;
+    }
+    
+    if (isNaN(quantidadeJogos) || quantidadeJogos < 1 || quantidadeJogos > 100) {
+        showNotification('A quantidade de jogos deve ser entre 1 e 100', 'error');
+        return;
+    }
+    
+    // Verificar se há dígitos específicos selecionados
+    const digitosSelecionados = [];
+    for (let i = 0; i <= 9; i++) {
+        const checkbox = document.getElementById(`digito-${i}`);
+        if (checkbox && checkbox.checked) {
+            digitosSelecionados.push(i.toString());
+        }
+    }
+    
+    // Gerar jogos
+    try {
+        showLoading();
+        jogosGerados = gerarJogos(parseInt(quantidadeDigitos), quantidadeJogos, digitosSelecionados);
+        exibirJogosGerados(jogosGerados);
+        showNotification(`${jogosGerados.length} jogos gerados com sucesso!`, 'success');
+    } catch (error) {
+        console.error('Erro ao gerar jogos:', error);
+        showNotification('Erro ao gerar jogos: ' + error.message, 'error');
+    } finally {
+        hideLoading();
+    }
+}
+
+function gerarMaisJogos() {
+    const quantidadeDigitos = document.getElementById('quantidade-digitos').value;
+    const quantidadeJogos = parseInt(document.getElementById('quantidade-jogos').value);
+    
+    // Validar entrada
+    if (!quantidadeDigitos || isNaN(quantidadeJogos) || quantidadeJogos < 1 || quantidadeJogos > 100) {
+        showNotification('Verifique os parâmetros de geração', 'error');
+        return;
+    }
+    
+    // Verificar se há dígitos específicos selecionados
+    const digitosSelecionados = [];
+    for (let i = 0; i <= 9; i++) {
+        const checkbox = document.getElementById(`digito-${i}`);
+        if (checkbox && checkbox.checked) {
+            digitosSelecionados.push(i.toString());
+        }
+    }
+    
+    // Gerar mais jogos
+    try {
+        showLoading();
+        const novosJogos = gerarJogos(parseInt(quantidadeDigitos), quantidadeJogos, digitosSelecionados);
+        jogosGerados = [...jogosGerados, ...novosJogos];
+        exibirJogosGerados(jogosGerados);
+        showNotification(`${novosJogos.length} jogos adicionais gerados com sucesso!`, 'success');
+    } catch (error) {
+        console.error('Erro ao gerar mais jogos:', error);
+        showNotification('Erro ao gerar mais jogos: ' + error.message, 'error');
+    } finally {
+        hideLoading();
+    }
+}
+
+function gerarJogos(quantidadeDigitos, quantidadeJogos, digitosEspecificos = []) {
+    const jogos = [];
+    const maximoTentativas = 1000; // Evitar loops infinitos
+    
+    // Se quantidadeDigitos for 10, usar todos os dígitos (0-9)
+    const usarTodosDigitos = quantidadeDigitos === 10;
+    
+    // Determinar quais dígitos usar
+    let digitosDisponiveis = [];
+    if (digitosEspecificos.length > 0) {
+        // Se dígitos específicos foram selecionados, usar somente esses
+        digitosDisponiveis = [...digitosEspecificos];
+        
+        // Verificar se a quantidade selecionada é compatível
+        if (!usarTodosDigitos && digitosEspecificos.length < quantidadeDigitos) {
+            throw new Error(`Você selecionou apenas ${digitosEspecificos.length} dígitos, mas pediu jogos com ${quantidadeDigitos} dígitos.`);
+        }
+    } else {
+        // Caso contrário, usar todos os dígitos (0-9)
+        digitosDisponiveis = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+    }
+    
+    // Conjunto para rastrear combinações únicas
+    const jogosUnicos = new Set();
+    
+    for (let i = 0; i < quantidadeJogos; i++) {
+        let tentativas = 0;
+        let jogoValido = false;
+        
+        while (!jogoValido && tentativas < maximoTentativas) {
+            // Gerar um jogo aleatório da Mega Sena
+            const numeros = gerarNumerosAleatorios();
+            
+            // Extrair dígitos do jogo
+            const digitosDoJogo = extrairDigitos(numeros);
+            
+            // Verificar se atende aos requisitos de quantidade de dígitos
+            let digitosValidos = false;
+            
+            if (usarTodosDigitos) {
+                // Se pediu todos os dígitos, qualquer jogo é válido
+                digitosValidos = true;
+            } else if (digitosEspecificos.length > 0) {
+                // Se especificou dígitos, todos os dígitos do jogo devem estar nessa lista
+                // E o jogo deve ter exatamente a quantidade de dígitos solicitada
+                const todosDigitosValidos = digitosDoJogo.every(d => digitosEspecificos.includes(d));
+                digitosValidos = todosDigitosValidos && digitosDoJogo.length === quantidadeDigitos;
+            } else {
+                // Caso normal: jogo deve ter exatamente a quantidade de dígitos solicitada
+                digitosValidos = digitosDoJogo.length === quantidadeDigitos;
+            }
+            
+            if (digitosValidos) {
+                // Verificar se este jogo já foi gerado
+                const jogoKey = numeros.join('-');
+                if (!jogosUnicos.has(jogoKey)) {
+                    jogosUnicos.add(jogoKey);
+                    
+                    const jogo = {
+                        numeros: numeros,
+                        digitosUsados: digitosDoJogo,
+                        digitosOrdenados: digitosDoJogo,
+                        quantidadeDigitos: digitosDoJogo.length
+                    };
+                    
+                    jogos.push(jogo);
+                    jogoValido = true;
+                }
+            }
+            
+            tentativas++;
+        }
+        
+        // Se atingiu o máximo de tentativas sem sucesso
+        if (tentativas >= maximoTentativas && !jogoValido) {
+            throw new Error(`Não foi possível gerar ${quantidadeJogos} jogos com exatamente ${quantidadeDigitos} dígitos. Tente com uma quantidade diferente de dígitos.`);
+        }
+    }
+    
+    return jogos;
+}
+
+function gerarNumerosAleatorios() {
+    // Gerar 6 números aleatórios entre 1 e 60 sem repetição
+    const numeros = new Set();
+    
+    while (numeros.size < 6) {
+        const numero = Math.floor(Math.random() * 60) + 1;
+        numeros.add(numero);
+    }
+    
+    // Converter para array e ordenar
+    return Array.from(numeros).sort((a, b) => a - b);
+}
+
+function extrairDigitos(numeros) {
+    const digitosSet = new Set();
+    
+    numeros.forEach(numero => {
+        // Converter para string e garantir que tenha dois dígitos
+        const numeroStr = numero.toString().padStart(2, '0');
+        for (let digito of numeroStr) {
+            digitosSet.add(digito);
+        }
+    });
+    
+    // Converter de volta para array e ordenar
+    return Array.from(digitosSet).sort();
+}
+
+function exibirJogosGerados(jogos) {
+    const container = document.getElementById('jogos-gerados-container');
+    const tbody = document.querySelector('#jogos-gerados-table tbody');
+    
+    // Mostrar o container
+    container.style.display = 'block';
+    
+    // Limpar tabela anterior
+    tbody.innerHTML = '';
+    
+    // Adicionar cada jogo à tabela
+    jogos.forEach(jogo => {
+        const tr = document.createElement('tr');
+        
+        // Coluna dos números do jogo
+        const tdJogo = document.createElement('td');
+        tdJogo.textContent = jogo.numeros.map(n => n.toString().padStart(2, '0')).join(' - ');
+        tr.appendChild(tdJogo);
+        
+        // Coluna dos dígitos usados
+        const tdDigitos = document.createElement('td');
+        const digitosDiv = document.createElement('div');
+        digitosDiv.className = 'digitos-celula';
+        
+        jogo.digitosUsados.forEach(digito => {
+            const digitoSpan = document.createElement('span');
+            digitoSpan.className = 'digito-item';
+            digitoSpan.textContent = digito;
+            digitosDiv.appendChild(digitoSpan);
+        });
+        
+        tdDigitos.appendChild(digitosDiv);
+        tr.appendChild(tdDigitos);
+        
+        // Coluna dos dígitos ordenados
+		const tdDigitosOrdenados = document.createElement('td');
+		tdDigitosOrdenados.className = 'digitos-ordenados'; // Adiciona classe para centralização
+		tdDigitosOrdenados.textContent = jogo.digitosOrdenados.join(', ');
+		tr.appendChild(tdDigitosOrdenados);
+        
+        // Coluna da quantidade de dígitos
+        const tdQuantidade = document.createElement('td');
+        tdQuantidade.textContent = jogo.quantidadeDigitos;
+        tr.appendChild(tdQuantidade);
+        
+        tbody.appendChild(tr);
+    });
+    
+    // Rolar para a tabela
+    container.scrollIntoView({ behavior: 'smooth' });
+}
+
+function downloadJogosExcel() {
+    if (jogosGerados.length === 0) {
+        showNotification('Não há jogos para baixar. Gere alguns jogos primeiro.', 'error');
+        return;
+    }
+    
+    // Criar conteúdo HTML para Excel
+    let excelContent = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40">';
+    excelContent += '<head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>Jogos Mega Sena</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--></head>';
+    excelContent += '<body><table border="1">';
+    
+    // Adicionar cabeçalho com fundo preto e texto branco
+    excelContent += '<tr>';
+    excelContent += '<th style="background-color: #000000; color: #ffffff;">Jogo</th>';
+    excelContent += '<th style="background-color: #000000; color: #ffffff;">Dígitos Usados</th>';
+    excelContent += '<th style="background-color: #000000; color: #ffffff;">Dígitos Ordenados</th>';
+    excelContent += '<th style="background-color: #000000; color: #ffffff;">Quantidade</th>';
+    excelContent += '</tr>';
+    
+    // Adicionar dados
+    jogosGerados.forEach(jogo => {
+        excelContent += '<tr>';
+        excelContent += `<td style="text-align: left;">${jogo.numeros.map(n => n.toString().padStart(2, '0')).join(' - ')}</td>`;
+        excelContent += `<td style="text-align: left;">${jogo.digitosUsados.join(' ')}</td>`;
+        excelContent += `<td style="text-align: left;">${jogo.digitosOrdenados.join(', ')}</td>`;
+        excelContent += `<td style="text-align: left;">${jogo.quantidadeDigitos}</td>`;
+        excelContent += '</tr>';
+    });
+    
+    excelContent += '</table></body></html>';
+    
+    // Criar o blob com tipo MIME para Excel
+    const blob = new Blob([excelContent], {type: 'application/vnd.ms-excel'});
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = 'jogos_mega_sena_digitos.xls';
+    link.click();
+    
+    showNotification('Download do arquivo Excel iniciado!', 'success');
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    const existingInit = window.inicializarGeradorJogos;
+    
+    // Substituir a função de inicialização para adicionar estilos específicos
+    window.inicializarGeradorJogos = function() {
+        if (existingInit) {
+            existingInit();
+        }
+        
+        const gerarMaisBtn = document.getElementById('gerar-mais-btn');
+        if (gerarMaisBtn) {
+            gerarMaisBtn.style.backgroundColor = '#209869'; // Cor verde da Mega Sena
+        }
+        
+        // Ajustar título dos jogos gerados
+        const jogosGeradosH3 = document.querySelector('.jogos-gerados-container h3');
+        if (jogosGeradosH3) {
+            jogosGeradosH3.style.color = '#209869';
+        }
+    };
+});
+
+
+// Adicionar inicialização do botão de download
+document.addEventListener('DOMContentLoaded', function() {
+    // Capturar função de inicialização existente
+    const existingInit = window.inicializarGeradorJogos;
+    
+    // Redefinir a função para adicionar o evento ao novo botão
+    window.inicializarGeradorJogos = function() {
+        if (existingInit) {
+            existingInit();
+        }
+        
+        // Adicionar evento ao botão de download de todos os jogos
+        const downloadAllExcelBtn = document.getElementById('download-all-excel-btn');
+        if (downloadAllExcelBtn) {
+            downloadAllExcelBtn.addEventListener('click', downloadAllJogosExcel);
+        }
+        
+        // Adicionar borda à seção
+        const jogosAleatoriosSection = document.querySelector('.jogos-aleatorios-section');
+        if (jogosAleatoriosSection) {
+            jogosAleatoriosSection.style.border = '3px solid black';
+            jogosAleatoriosSection.style.padding = '20px';
+            jogosAleatoriosSection.style.margin = '20px 0';
+        }
+    };
+    
+    // Se o botão já estiver no DOM, adiciona o evento diretamente
+    const downloadAllExcelBtn = document.getElementById('download-all-excel-btn');
+    if (downloadAllExcelBtn) {
+        downloadAllExcelBtn.addEventListener('click', downloadAllJogosExcel);
+    }
+});
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Análise de Palpites da Mega Sena</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Análise de Palpites para Mega Sena</h1>
+			<p>Para descobrir QUANTOS e QUAIS digitos foram usados na geração de palpites.</p>
+		</header>
+		
+		<div class="instrucaoes">
+			<h2>Instruções de uso:</h2>
+				<ol>
+					<li>Na seção "Seus Palpites"<small class="texto-menor"> Digite manualmente.</small></li>
+					<li>Na seção "Importar Palpites"<small class="texto-menor"> Arraste/Solte ou faça o upload.</small></li>
+					<li>Na seção "Gerador de Palpites Aleatórios"<small class="texto-menor"> Selecione quantos dígitos, a quantidade de jogos.</small></li>
+				</ol>
+		</div><br />
+		
+
+
+
+        <main>
+			<section class="jogos-aleatorios-section" style="border: 3px solid black; padding: 20px; margin: 20px 0;">
+            <!--<section class="palpites-section">-->
+				<h2 style="color: black;">Seus Palpites</h2>
+                <div id="palpites-container">
+                    <div class="palpite-row">
+                        <div class="numeros-container">
+                            <input type="number" min="1" max="60" class="numero-input" placeholder="Nº 1" required>
+                            <input type="number" min="1" max="60" class="numero-input" placeholder="Nº 2" required>
+                            <input type="number" min="1" max="60" class="numero-input" placeholder="Nº 3" required>
+                            <input type="number" min="1" max="60" class="numero-input" placeholder="Nº 4" required>
+                            <input type="number" min="1" max="60" class="numero-input" placeholder="Nº 5" required>
+                            <input type="number" min="1" max="60" class="numero-input" placeholder="Nº 6" required>
+                        </div>
+                        <div class="analise-container">
+                            <!-- Aqui serÃ£o exibidos os resultados da Análise -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+			
+			<section class="jogos-aleatorios-section" style="border: 3px solid black; padding: 20px; margin: 20px 0;">
+			<!--<section class="arraste-section">-->
+				<h2 style="color: black;">Importar Palpites</h2>
+			   <p>Arraste arquivos com jogos da Mega Sena ou clique para selecionar</p>
+				
+				<div id="drop-area">
+					<form class="upload-form">
+						<input type="file" id="fileElem" multiple accept=".txt,.csv" onchange="handleFiles(this.files)">
+						<label class="upload-button" for="fileElem">
+							<div class="upload-icon">
+								<span class="arrow">↑</span>
+							</div>
+							<span>Selecionar arquivos ou arrastar aqui</span>
+						</label>
+					</form>
+				</div>
+				
+				<div id="jogos-importados-container">
+					<h3>Jogos Importados</h3>
+					<div class="jogos-table-container">
+						<table id="jogos-importados-table">
+							<thead>
+								<tr>
+									<th>Jogo</th>
+									<th>Dígitos Usados</th>
+									<th>Dígitos Ordenados</th>
+									<th>Quantidade</th>
+								</tr>
+							</thead>
+							<tbody>
+								<!-- Os jogos importados serão exibidos aqui -->
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</section>
+			<section class="jogos-aleatorios-section" style="border: 3px solid black; padding: 20px; margin: 20px 0;">
+			<!--<section class="jogos-aleatorios-section">-->
+				<h2 style="color: black;">Gerador de Jogos Aleatórios</h2>
+				<p>Crie jogos aleatórios para a Mega Sena com base na quantidade de dígitos escolhida</p>
+				
+				<div class="gerador-container">
+					<div class="controles-container">
+						<div class="form-group">
+							<label for="quantidade-digitos">Quantidade de dígitos:</label>
+							<select id="quantidade-digitos">
+								<option value="">Selecione a quantidade</option>
+								<option value="1">1 dígito</option>
+								<option value="2">2 dígitos</option>
+								<option value="3">3 dígitos</option>
+								<option value="4">4 dígitos</option>
+								<option value="5">5 dígitos</option>
+								<option value="6">6 dígitos</option>
+								<option value="7">7 dígitos</option>
+								<option value="8">8 dígitos</option>
+								<option value="9">9 dígitos</option>
+								<option value="10">10 dígitos (todos)</option>
+							</select>
+						</div>
+						
+						<div class="form-group">
+							<label for="quantidade-jogos">Quantidade de jogos:</label>
+							<input type="number" id="quantidade-jogos" min="1" max="100" value="5">
+						</div>
+						
+						<div class="form-group">
+							<label>Dígitos específicos (opcional):</label>
+							<div class="digitos-checkbox-container">
+								<div class="digito-checkbox">
+									<input type="checkbox" id="digito-0" value="0">
+									<label for="digito-0">0</label>
+								</div>
+								<div class="digito-checkbox">
+									<input type="checkbox" id="digito-1" value="1">
+									<label for="digito-1">1</label>
+								</div>
+								<div class="digito-checkbox">
+									<input type="checkbox" id="digito-2" value="2">
+									<label for="digito-2">2</label>
+								</div>
+								<div class="digito-checkbox">
+									<input type="checkbox" id="digito-3" value="3">
+									<label for="digito-3">3</label>
+								</div>
+								<div class="digito-checkbox">
+									<input type="checkbox" id="digito-4" value="4">
+									<label for="digito-4">4</label>
+								</div>
+								<div class="digito-checkbox">
+									<input type="checkbox" id="digito-5" value="5">
+									<label for="digito-5">5</label>
+								</div>
+								<div class="digito-checkbox">
+									<input type="checkbox" id="digito-6" value="6">
+									<label for="digito-6">6</label>
+								</div>
+								<div class="digito-checkbox">
+									<input type="checkbox" id="digito-7" value="7">
+									<label for="digito-7">7</label>
+								</div>
+								<div class="digito-checkbox">
+									<input type="checkbox" id="digito-8" value="8">
+									<label for="digito-8">8</label>
+								</div>
+								<div class="digito-checkbox">
+									<input type="checkbox" id="digito-9" value="9">
+									<label for="digito-9">9</label>
+								</div>
+							</div>
+						</div>
+						
+						<button id="gerar-jogos-btn" class="button">Gerar Jogos Aleatórios</button>
+					</div>
+					
+					<div id="jogos-gerados-container" class="jogos-gerados-container" style="display: none;">
+						<h3>Jogos Gerados</h3>
+						<div class="jogos-table-container">
+							<table id="jogos-gerados-table">
+								<thead>
+									<tr>
+										<th>Jogo</th>
+										<th>Dígitos Usados</th>
+										<th>Dígitos Ordenados</th>
+										<th>Quantidade</th>
+									</tr>
+								</thead>
+								<tbody>
+									<!-- Os jogos gerados serão exibidos aqui -->
+								</tbody>
+							</table>
+						</div>
+						
+						<div class="acoes-container">
+							<button id="download-excel-btn" class="button">Baixar em Excel</button>
+							<button id="gerar-mais-btn" class="button">Gerar Mais Jogos</button>
+						</div>
+					</div>
+				</div>
+			</section>
+        </main>
+
+    <footer>Feito por: <i>Márcio Fernando Maia -  Todos os direitos reservado - 2025</footer>
+
+    </div>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>
+/* Reset e estilos bÃ¡sicos */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --primary-color: #209869; /* Verde Mega Sena */
+    --secondary-color: #1b7a54;
+    --accent-color: #f8c300; /* Amarelo */
+    --text-color: #333;
+    --light-bg: #f5f5f5;
+    --error-color: #e74c3c;
+    --success-color: #2ecc71;
+    --border-radius: 4px;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    color: var(--text-color);
+    background-color: var(--light-bg);
+}
+
+.container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* Header */
+header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+header h1 {
+    color: var(--primary-color);
+    margin-bottom: 10px;
+}
+
+/* SeÃ§Ãµes */
+section {
+    background-color: white;
+    border-radius: var(--border-radius);
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+    color: var(--primary-color);
+    margin-bottom: 20px;
+}
+
+/* Inputs de números */
+.numeros-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.numero-input {
+    width: 50px;
+    height: 50px;
+    border: 2px solid #ddd;
+    border-radius: 50%;
+    text-align: center;
+    /*font-size: 1.2rem;*/
+    font-weight: normal;
+    transition: all 0.3s ease;
+}
+
+.numero-input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px rgba(32, 152, 105, 0.3);
+}
+
+.numero-input.valid {
+    background-color: rgba(46, 204, 113, 0.1);
+    border-color: var(--success-color);
+}
+
+.numero-input.invalid {
+    background-color: rgba(231, 76, 60, 0.1);
+    border-color: var(--error-color);
+}
+
+/* Linhas de palpites */
+.palpite-row {
+    border-bottom: 1px solid #eee;
+    padding-bottom: 20px;
+    margin-bottom: 20px;
+}
+
+.palpite-row:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+}
+
+/* AnÃ¡lise dos palpites */
+.analise-container {
+    background-color: #f9f9f9;
+    padding: 15px;
+    border-radius: var(--border-radius);
+    margin-top: 10px;
+}
+
+.numeros-usados {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    margin-top: 10px;
+}
+
+.numero-usado {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    background-color: var(--primary-color);
+    color: white;
+    border-radius: 50%;
+    font-weight: bold;
+}
+
+/* Footer */
+footer {
+    color: #161515;
+    text-align: center;
+    padding: 5px;
+    margin-bottom: auto;
+    margin-top: 10px; /* Espaço acima do rodapé */
+    }
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .numeros-container {
+        justify-content: center;
+    }
+    
+    .numero-input {
+        width: 50px;
+        height: 50px;
+        /*font-size: 1.2rem;*/
+    }
+}
+
+@media (max-width: 480px) {
+    .numero-input {
+        width: 50px;
+        height: 50px;
+        /*font-size: 1rem;*/
+    }
+}
+/* Estilos para seção de arrastar e soltar */
+.arraste-section {
+    background-color: white;
+    border-radius: var(--border-radius);
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.arraste-section p {
+    text-align: center;
+    color: #666;
+    margin-bottom: 20px;
+}
+
+#drop-area {
+    border: 2px dashed var(--primary-color);
+    border-radius: 8px;
+    padding: 30px;
+    text-align: center;
+    transition: all 0.3s ease;
+    background-color: rgba(32, 152, 105, 0.05);
+    margin-bottom: 30px;
+}
+
+#drop-area.highlight {
+    background-color: rgba(32, 152, 105, 0.2);
+    border-color: var(--accent-color);
+}
+
+#drop-area.active {
+    background-color: rgba(248, 195, 0, 0.2);
+    transform: scale(1.02);
+}
+
+.upload-form {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#fileElem {
+    display: none;
+}
+
+.upload-button {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+    padding: 10px;
+    width: 100%;
+}
+
+.upload-icon {
+    width: 80px;
+    height: 80px;
+    background-color: var(--primary-color);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 10px;
+}
+
+.arrow {
+    color: white;
+    font-size: 2.5rem;
+    font-weight: bold;
+}
+
+#jogos-importados-container {
+    margin-top: 30px;
+    display: none; /* Inicialmente oculto */
+}
+
+#jogos-importados-container h3 {
+    color: var(--primary-color);
+    margin-bottom: 15px;
+}
+
+.jogos-table-container {
+    overflow-x: auto;
+}
+
+#jogos-importados-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+#jogos-importados-table th,
+#jogos-importados-table td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+#jogos-importados-table th {
+    background-color: var(--primary-color);
+    color: white;
+    position: sticky;
+    top: 0;
+}
+
+#jogos-importados-table tr:hover {
+    background-color: #f5f5f5;
+}
+
+.digitos-celula {
+    display: flex;
+    gap: 5px;
+    flex-wrap: wrap;
+}
+
+.digito-item {
+    display: inline-block;
+    width: 25px;
+    height: 25px;
+    line-height: 25px;
+    text-align: center;
+    border-radius: 50%;
+    background-color: var(--primary-color);
+    color: white;
+    font-weight: normal;
+    font-size: 0.8rem;
+}
+
+/* Efeito de loading */
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(255, 255, 255, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    display: none;
+}
+
+.loader {
+    border: 5px solid #f3f3f3;
+    border-top: 5px solid var(--primary-color);
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Notificação */
+.notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 15px 20px;
+    background-color: var(--primary-color);
+    color: white;
+    border-radius: 4px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transform: translateX(120%);
+    transition: transform 0.3s ease;
+    z-index: 1001;
+}
+
+.notification.show {
+    transform: translateX(0);
+}
+
+.notification.error {
+    background-color: var(--error-color);
+}
+
+.notification.success {
+    background-color: var(--success-color);
+}
+.texto-menor {
+    font-size: 50%;
+}
+/* Estilos para seção de jogos aleatórios */
+.jogos-aleatorios-section {
+    background-color: white;
+    border-radius: var(--border-radius);
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.jogos-aleatorios-section p {
+    text-align: center;
+    color: #666;
+    margin-bottom: 20px;
+}
+
+.gerador-container {
+    margin-top: 20px;
+}
+
+.controles-container {
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: var(--border-radius);
+    border: 1px solid #eee;
+    margin-bottom: 20px;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: var(--primary-color);
+}
+
+.form-group select,
+.form-group input[type="number"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+.digitos-checkbox-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 8px;
+}
+
+.digito-checkbox {
+    display: flex;
+    align-items: center;
+    background-color: #f0f0f0;
+    padding: 5px 10px;
+    border-radius: 20px;
+    transition: all 0.2s ease;
+}
+
+.digito-checkbox:hover {
+    background-color: #e0e0e0;
+}
+
+.digito-checkbox input[type="checkbox"] {
+    margin-right: 5px;
+    cursor: pointer;
+}
+
+.digito-checkbox label {
+    margin-bottom: 0;
+    cursor: pointer;
+    font-weight: normal;
+}
+
+.digito-checkbox input[type="checkbox"]:checked + label {
+    font-weight: bold;
+    color: var(--primary-color);
+}
+
+#gerar-jogos-btn {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    font-size: 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    width: 100%;
+    margin-top: 15px;
+    transition: background-color 0.3s ease;
+}
+
+#gerar-jogos-btn:hover {
+    background-color: var(--secondary-color);
+}
+
+.jogos-gerados-container {
+    margin-top: 30px;
+}
+
+.jogos-gerados-container h3 {
+    color: var(--primary-color);
+    margin-bottom: 15px;
+}
+
+.acoes-container {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+    justify-content: center;
+}
+
+.acoes-container .button {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    font-size: 14px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.acoes-container .button:hover {
+    background-color: var(--secondary-color);
+}
+
+#download-excel-btn {
+    background-color: #217346; /* Cor do Excel */
+}
+
+#download-excel-btn:hover {
+    background-color: #1b5a37;
+}
+
+/* Estilos responsivos */
+@media (max-width: 768px) {
+    .digitos-checkbox-container {
+        justify-content: center;
+    }
+    
+    .acoes-container {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .acoes-container .button {
+        width: 100%;
+    }
+}
+.digitos-celula {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px; /* Aumentado para dar mais espaço entre os círculos */
+    margin: 5px 0;
+}
+
+.digito-item {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    background-color: var(--primary-color);
+    color: white;
+    border-radius: 50%;
+    font-weight: bold;
+    font-size: 0.9rem;
+    margin-right: 5px;
+}
+/* Estilos para centralizar informações nas tabelas */
+
+/* Centralizar cabeçalhos da tabela */
+#jogos-gerados-table th,
+#jogos-importados-table th {
+    text-align: center;
+    background-color: var(--primary-color);
+    color: white;
+    position: sticky;
+    top: 0;
+}
+
+/* Centralizar conteúdo das células */
+#jogos-gerados-table td,
+#jogos-importados-table td {
+    text-align: center;
+    vertical-align: middle;
+    padding: 12px;
+}
+
+/* Estilo específico para a coluna de jogos (primeira coluna) */
+#jogos-gerados-table td:first-child,
+#jogos-importados-table td:first-child {
+    text-align: center;
+}
+
+/* Centralizar os dígitos usados */
+.digitos-celula {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 5px 0;
+    justify-content: center; /* Centraliza os dígitos horizontalmente */
+}
+
+/* Centralizar o texto dos dígitos ordenados */
+.digitos-ordenados {
+    text-align: center;
+}
+
+/* Estilo para o título da seção de jogos gerados */
+.jogos-gerados-container h3 {
+    text-align: center;
+    color: var(--primary-color);
+    margin-bottom: 15px;
+}
+
+/* Estilo para a tabela de jogos gerados */
+#jogos-gerados-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 0 auto; /* Centraliza a tabela */
+}
+
+/* Fundo alternado para melhorar a legibilidade */
+#jogos-gerados-table tbody tr:nth-child(odd),
+#jogos-importados-table tbody tr:nth-child(odd) {
+    background-color: rgba(173, 216, 230, 0.3); /* Azul claro com transparência */
+}
+
+#jogos-gerados-table tbody tr:nth-child(even),
+#jogos-importados-table tbody tr:nth-child(even) {
+    background-color: rgba(173, 216, 230, 0.1); /* Azul mais claro com transparência */
+}
+
+/* Estilo para os botões na parte inferior */
+.acoes-container {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+    justify-content: center; /* Centraliza os botões */
+}
+
+/* Estilo para o fundo da seção de jogos gerados */
+.jogos-gerados-container {
+    background-color: #d9f2f8; /* Azul claro similar à imagem */
+    padding: 20px;
+    border-radius: var(--border-radius);
+    margin-top: 20px;
+}
+
+.instrucaoes{
+    background-color: #f9f9f9; /* Fundo cinza claro */
+    border-radius: 12px; /* Bordas arredondadas */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra leve */
+    padding: 20px; /* Espaçamento interno */
+    text-align: left; /* Centraliza o texto */
+    font-family: Arial, sans-serif; /* Fonte padrão */
+    color: #333; /* Cor do texto */
+    line-height: 35px;
+}
+/* Efeito hover para área de drop */
+#drop-area {
+    border: 2px dashed var(--primary-color);
+    border-radius: 8px;
+    padding: 30px;
+    text-align: center;
+    transition: all 0.3s ease;
+    background-color: rgba(32, 152, 105, 0.05);
+    margin-bottom: 30px;
+}
+
+/* Quando o mouse passar por cima da área de drop */
+#drop-area:hover {
+    background-color: rgba(32, 152, 105, 0.2);
+    border-color: var(--accent-color);
+    box-shadow: 0 0 10px rgba(32, 152, 105, 0.3);
+    transform: scale(1.01);
+    cursor: pointer;
+}
+
+#drop-area.highlight {
+    background-color: rgba(32, 152, 105, 0.2);
+    border-color: var(--accent-color);
+    box-shadow: 0 0 15px rgba(32, 152, 105, 0.4);
+}
+
+#drop-area.active {
+    background-color: rgba(248, 195, 0, 0.2);
+    transform: scale(1.02);
+}
+/* Estilo para container de botões na seção de jogos importados */
+#jogos-importados-container .acoes-container {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+    justify-content: center;
+}
+
+/* Estilo para o botão de download */
+#download-importados-excel-btn {
+    background-color: #217346; /* Cor do Excel */
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    font-size: 14px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#download-importados-excel-btn:hover {
+    background-color: #1b5a37;
+}
+
+#LOCALHOST
+# flask==2.0.1
+# werkzeug-2.3.0
+
+#RENDER
+flask==2.2.5
+werkzeug==2.3.0
+
+
+@echo off
+echo Iniciando Analise de Palpites da Mega Sena...
+cd "J:\Meu Drive\ProjetosPython\Loterias\Estrategias\MegaSena\AnaliseDosPalpitesMS"
+call venv\Scripts\activate.bat
+python app.py

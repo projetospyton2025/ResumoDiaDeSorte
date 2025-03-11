@@ -1,0 +1,730 @@
+﻿/* Reset e estilos bÃ¡sicos */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --primary-color: #209869; /* Verde Mega Sena */
+    --secondary-color: #1b7a54;
+    --accent-color: #f8c300; /* Amarelo */
+    --text-color: #333;
+    --light-bg: #f5f5f5;
+    --error-color: #e74c3c;
+    --success-color: #2ecc71;
+    --border-radius: 4px;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    color: var(--text-color);
+    background-color: var(--light-bg);
+}
+
+.container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* Header */
+header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+header h1 {
+    color: var(--primary-color);
+    margin-bottom: 10px;
+}
+
+/* SeÃ§Ãµes */
+section {
+    background-color: white;
+    border-radius: var(--border-radius);
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+    color: var(--primary-color);
+    margin-bottom: 20px;
+}
+
+/* Inputs de números */
+.numeros-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.numero-input {
+    width: 50px;
+    height: 50px;
+    border: 2px solid #ddd;
+    border-radius: 50%;
+    text-align: center;
+    /*font-size: 1.2rem;*/
+    font-weight: normal;
+    transition: all 0.3s ease;
+}
+
+.numero-input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px rgba(32, 152, 105, 0.3);
+}
+
+.numero-input.valid {
+    background-color: rgba(46, 204, 113, 0.1);
+    border-color: var(--success-color);
+}
+
+.numero-input.invalid {
+    background-color: rgba(231, 76, 60, 0.1);
+    border-color: var(--error-color);
+}
+
+/* Linhas de palpites */
+.palpite-row {
+    border-bottom: 1px solid #eee;
+    padding-bottom: 20px;
+    margin-bottom: 20px;
+}
+
+.palpite-row:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+}
+
+/* AnÃ¡lise dos palpites */
+.analise-container {
+    background-color: #f9f9f9;
+    padding: 15px;
+    border-radius: var(--border-radius);
+    margin-top: 10px;
+}
+
+.numeros-usados {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    margin-top: 10px;
+}
+
+.numero-usado {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    background-color: var(--primary-color);
+    color: white;
+    border-radius: 50%;
+    font-weight: bold;
+}
+
+/* Footer */
+footer {
+    color: #161515;
+    text-align: center;
+    padding: 5px;
+    margin-bottom: auto;
+    margin-top: 10px; /* Espaço acima do rodapé */
+    }
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .numeros-container {
+        justify-content: center;
+    }
+    
+    .numero-input {
+        width: 50px;
+        height: 50px;
+        /*font-size: 1.2rem;*/
+    }
+}
+
+@media (max-width: 480px) {
+    .numero-input {
+        width: 50px;
+        height: 50px;
+        /*font-size: 1rem;*/
+    }
+}
+/* Estilos para seção de arrastar e soltar */
+.arraste-section {
+    background-color: white;
+    border-radius: var(--border-radius);
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.arraste-section p {
+    text-align: center;
+    color: #666;
+    margin-bottom: 20px;
+}
+
+#drop-area {
+    border: 2px dashed var(--primary-color);
+    border-radius: 8px;
+    padding: 30px;
+    text-align: center;
+    transition: all 0.3s ease;
+    background-color: rgba(32, 152, 105, 0.05);
+    margin-bottom: 30px;
+}
+
+#drop-area.highlight {
+    background-color: rgba(32, 152, 105, 0.2);
+    border-color: var(--accent-color);
+}
+
+#drop-area.active {
+    background-color: rgba(248, 195, 0, 0.2);
+    transform: scale(1.02);
+}
+
+.upload-form {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#fileElem {
+    display: none;
+}
+
+.upload-button {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+    padding: 10px;
+    width: 100%;
+}
+
+.upload-icon {
+    width: 80px;
+    height: 80px;
+    background-color: var(--primary-color);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 10px;
+}
+
+.arrow {
+    color: white;
+    font-size: 2.5rem;
+    font-weight: bold;
+}
+
+#jogos-importados-container {
+    margin-top: 30px;
+    display: none; /* Inicialmente oculto */
+}
+
+#jogos-importados-container h3 {
+    color: var(--primary-color);
+    margin-bottom: 15px;
+}
+
+.jogos-table-container {
+    overflow-x: auto;
+}
+
+#jogos-importados-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+#jogos-importados-table th,
+#jogos-importados-table td {
+    padding: 12px;
+    text-align: center;
+    border-bottom: 1px solid #ddd;
+}
+
+#jogos-importados-table th {
+    background-color: var(--primary-color);
+    color: white;
+    position: sticky;
+    top: 0;
+}
+
+#jogos-importados-table tr:hover {
+    background-color: #f5f5f5;
+}
+
+.digitos-celula {
+    display: flex;
+    gap: 5px;
+    flex-wrap: wrap;
+}
+
+.digito-item {
+    display: inline-block;
+    width: 25px;
+    height: 25px;
+    line-height: 25px;
+    text-align: center;
+    border-radius: 50%;
+    background-color: var(--primary-color);
+    color: white;
+    font-weight: normal;
+    font-size: 0.8rem;
+}
+
+/* Efeito de loading */
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(255, 255, 255, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    display: none;
+}
+
+.loader {
+    border: 5px solid #f3f3f3;
+    border-top: 5px solid var(--primary-color);
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Notificação */
+.notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 15px 20px;
+    background-color: var(--primary-color);
+    color: white;
+    border-radius: 4px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transform: translateX(120%);
+    transition: transform 0.3s ease;
+    z-index: 1001;
+}
+
+.notification.show {
+    transform: translateX(0);
+}
+
+.notification.error {
+    background-color: var(--error-color);
+}
+
+.notification.success {
+    background-color: var(--success-color);
+}
+.texto-menor {
+    font-size: 50%;
+}
+/* Estilos para seção de jogos aleatórios */
+.jogos-aleatorios-section {
+    background-color: white;
+    border-radius: var(--border-radius);
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.jogos-aleatorios-section p {
+    text-align: center;
+    color: #666;
+    margin-bottom: 20px;
+}
+
+.gerador-container {
+    margin-top: 20px;
+}
+
+.controles-container {
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: var(--border-radius);
+    border: 1px solid #eee;
+    margin-bottom: 20px;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: var(--primary-color);
+}
+
+.form-group select,
+.form-group input[type="number"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+.digitos-checkbox-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 8px;
+}
+
+.digito-checkbox {
+    display: flex;
+    align-items: center;
+    background-color: #f0f0f0;
+    padding: 5px 10px;
+    border-radius: 20px;
+    transition: all 0.2s ease;
+}
+
+.digito-checkbox:hover {
+    background-color: #e0e0e0;
+}
+
+.digito-checkbox input[type="checkbox"] {
+    margin-right: 5px;
+    cursor: pointer;
+}
+
+.digito-checkbox label {
+    margin-bottom: 0;
+    cursor: pointer;
+    font-weight: normal;
+}
+
+.digito-checkbox input[type="checkbox"]:checked + label {
+    font-weight: bold;
+    color: var(--primary-color);
+}
+
+#gerar-jogos-btn {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    font-size: 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    width: 100%;
+    margin-top: 15px;
+    transition: background-color 0.3s ease;
+}
+
+#gerar-jogos-btn:hover {
+    background-color: var(--secondary-color);
+}
+
+.jogos-gerados-container {
+    margin-top: 30px;
+}
+
+.jogos-gerados-container h3 {
+    color: var(--primary-color);
+    margin-bottom: 15px;
+}
+
+.acoes-container {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+    justify-content: center;
+}
+
+.acoes-container .button {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    font-size: 14px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.acoes-container .button:hover {
+    background-color: var(--secondary-color);
+}
+
+#download-excel-btn {
+    background-color: #217346; /* Cor do Excel */
+}
+
+#download-excel-btn:hover {
+    background-color: #1b5a37;
+}
+
+.digitos-celula {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px; /* Aumentado para dar mais espaço entre os círculos */
+    margin: 5px 0;
+}
+
+.digito-item {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    background-color: var(--primary-color);
+    color: white;
+    border-radius: 50%;
+    font-weight: bold;
+    font-size: 0.9rem;
+    margin-right: 5px;
+}
+/* Estilos para centralizar informações nas tabelas */
+
+/* Centralizar cabeçalhos da tabela */
+#jogos-gerados-table th,
+#jogos-importados-table th {
+    text-align: center;
+    background-color: var(--primary-color);
+    color: white;
+    position: sticky;
+    top: 0;
+}
+
+/* Centralizar conteúdo das células */
+#jogos-gerados-table td,
+#jogos-importados-table td {
+    text-align: center;
+    vertical-align: middle;
+    padding: 12px;
+}
+
+/* Estilo específico para a coluna de jogos (primeira coluna) */
+#jogos-gerados-table td:first-child,
+#jogos-importados-table td:first-child {
+    text-align: center;
+}
+
+/* Centralizar os dígitos usados */
+.digitos-celula {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1px;
+    margin: 2px 0;
+    justify-content: center; /* Centraliza os dígitos horizontalmente */
+}
+
+/* Centralizar o texto dos dígitos ordenados */
+.digitos-ordenados {
+    text-align: center;
+}
+
+/* Estilo para o título da seção de jogos gerados */
+.jogos-gerados-container h3 {
+    text-align: center;
+    color: var(--primary-color);
+    margin-bottom: 15px;
+}
+
+/* Estilo para a tabela de jogos gerados */
+#jogos-gerados-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 0 auto; /* Centraliza a tabela */
+}
+
+/* Fundo alternado para melhorar a legibilidade */
+#jogos-gerados-table tbody tr:nth-child(odd),
+#jogos-importados-table tbody tr:nth-child(odd) {
+    background-color: rgba(173, 216, 230, 0.3); /* Azul claro com transparência */
+}
+
+#jogos-gerados-table tbody tr:nth-child(even),
+#jogos-importados-table tbody tr:nth-child(even) {
+    background-color: rgba(173, 216, 230, 0.1); /* Azul mais claro com transparência */
+}
+
+/* Estilo para os botões na parte inferior */
+.acoes-container {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+    justify-content: center; /* Centraliza os botões */
+}
+
+/* Estilo para o fundo da seção de jogos gerados */
+.jogos-gerados-container {
+    background-color: #d9f2f8; /* Azul claro similar à imagem */
+    padding: 20px;
+    border-radius: var(--border-radius);
+    margin-top: 20px;
+}
+
+.instrucaoes{
+    background-color: #f9f9f9; /* Fundo cinza claro */
+    border-radius: 12px; /* Bordas arredondadas */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra leve */
+    padding: 20px; /* Espaçamento interno */
+    text-align: left; /* Centraliza o texto */
+    font-family: Arial, sans-serif; /* Fonte padrão */
+    color: #333; /* Cor do texto */
+    line-height: 35px;
+}
+/* Efeito hover para área de drop */
+#drop-area {
+    border: 2px dashed var(--primary-color);
+    border-radius: 8px;
+    padding: 30px;
+    text-align: center;
+    transition: all 0.3s ease;
+    background-color: rgba(32, 152, 105, 0.05);
+    margin-bottom: 30px;
+}
+
+/* Quando o mouse passar por cima da área de drop */
+#drop-area:hover {
+    background-color: rgba(32, 152, 105, 0.2);
+    border-color: var(--accent-color);
+    box-shadow: 0 0 10px rgba(32, 152, 105, 0.3);
+    transform: scale(1.01);
+    cursor: pointer;
+}
+
+#drop-area.highlight {
+    background-color: rgba(32, 152, 105, 0.2);
+    border-color: var(--accent-color);
+    box-shadow: 0 0 15px rgba(32, 152, 105, 0.4);
+}
+
+#drop-area.active {
+    background-color: rgba(248, 195, 0, 0.2);
+    transform: scale(1.02);
+}
+/* Estilo para container de botões na seção de jogos importados */
+#jogos-importados-container .acoes-container {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+    justify-content: center;
+}
+
+/* Estilo para o botão de download */
+#download-importados-excel-btn {
+    background-color: #217346; /* Cor do Excel */
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    font-size: 14px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#download-importados-excel-btn:hover {
+    background-color: #1b5a37;
+}
+
+
+/* Estilos responsivos */
+@media (max-width: 768px) {
+    .digitos-checkbox-container {
+        justify-content: center;
+    }
+    
+    .acoes-container {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .acoes-container .button {
+        width: 100%;
+    }
+}
+/* Ajustes para tabelas em telas pequenas 
+@media screen and (max-width: 768px) {
+    #jogos-importados-table,
+    #jogos-gerados-table {
+        font-size: 10px; /* Fonte menor para telas médias 
+    }
+ */   
+ /* Ajustes para tabelas em telas pequenas  */
+@media screen and (max-width: 768px) {
+    #jogos-importados-table,
+    #jogos-gerados-table {
+       font-size: clamp(8px, 2vw, 12px); /* fonte seja responsiva e se ajuste dinamicamente ao tamanho da tela */
+    }
+ 
+    #jogos-importados-table th,
+    #jogos-importados-table td,
+    #jogos-gerados-table th,
+    #jogos-gerados-table td {
+        padding: 8px 4px;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    #jogos-importados-table,
+    #jogos-gerados-table {
+        font-size: clamp(8px, 2vw, 12px); /* fonte seja responsiva e se ajuste dinamicamente ao tamanho da tela */
+    }
+    
+    #jogos-importados-table th,
+    #jogos-importados-table td,
+    #jogos-gerados-table th,
+    #jogos-gerados-table td {
+        padding: 6px 2px;
+    }
+    
+    .digitos-ordenados {
+        word-break: break-word;
+    }
+}
+
+/* Para Jogos Gerados */
+@media screen and (max-width: 768px) {
+    .jogos-gerados-container,
+    .jogos-gerados-table {
+       font-size: clamp(8px, 2vw, 12px); /* fonte seja responsiva e se ajuste dinamicamente ao tamanho da tela */
+    }
+ 
+
+}
+
+@media screen and (max-width: 480px) {
+    .jogos-gerados-container,
+    .jogos-gerados-table {
+        font-size: clamp(8px, 2vw, 12px); /* fonte seja responsiva e se ajuste dinamicamente ao tamanho da tela */
+    }
+    
+
+
+
+/* Garantir que a tabela seja rolável horizontalmente quando necessário */
+.jogos-table-container {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
